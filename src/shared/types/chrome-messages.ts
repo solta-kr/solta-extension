@@ -1,0 +1,30 @@
+export type ChromeMessage =
+	| { type: 'START_TIMER'; payload: { problemId: string; title: string } }
+	| { type: 'STOP_TIMER_IF_RUNNING'; payload: { problemId: string } }
+	| { type: 'GET_TIMER_STATE'; payload: { problemId: string } }
+	| {
+			type: 'SUBMIT_TO_SERVER';
+			payload: {
+				problemId: string;
+				solveTimeSeconds: number;
+				solveType: 'SELF' | 'SOLUTION';
+			};
+	  }
+	| {
+			type: 'SHOW_SOLVED_MODAL';
+			payload: {
+				problemId: string;
+				title: string;
+				elapsedMs: number;
+			};
+	  };
+
+export interface TimerStateResponse {
+	running: boolean;
+	startedAtMs?: number;
+}
+
+export interface SubmitResponse {
+	success: boolean;
+	error?: string;
+}
