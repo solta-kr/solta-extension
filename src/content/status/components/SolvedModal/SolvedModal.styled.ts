@@ -98,6 +98,68 @@ export const SolveTime = styled.div`
 	letter-spacing: -0.5px;
 `;
 
+export const TimeInputGroup = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	margin-bottom: 12px;
+`;
+
+export const TimeInputUnit = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+`;
+
+export const TimeInput = styled.input`
+	width: 56px;
+	padding: 8px 4px;
+	border: 1px solid ${({ theme }) => theme.colors.border};
+	border-radius: ${({ theme }) => theme.borderRadius.sm};
+	background: ${({ theme }) => theme.colors.bgSecondary};
+	color: ${({ theme }) => theme.colors.primary};
+	font-size: 22px;
+	font-weight: 700;
+	text-align: center;
+	font-family: ${({ theme }) => theme.fonts.base};
+	letter-spacing: -0.5px;
+	transition: all 0.2s ease;
+
+	&:focus {
+		outline: none;
+		border-color: ${({ theme }) => theme.colors.primary};
+		box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.primaryLight};
+	}
+
+	&::placeholder {
+		color: ${({ theme }) => theme.colors.textMuted};
+		font-weight: 400;
+	}
+
+	/* Hide number input arrows */
+	-moz-appearance: textfield;
+	&::-webkit-outer-spin-button,
+	&::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+`;
+
+export const TimeUnitLabel = styled.span`
+	font-size: 11px;
+	color: ${({ theme }) => theme.colors.textMuted};
+	font-weight: 500;
+`;
+
+export const TimeSeparator = styled.span`
+	font-size: 20px;
+	font-weight: 700;
+	color: ${({ theme }) => theme.colors.textMuted};
+	padding-bottom: 18px;
+`;
+
 export const ProblemTitle = styled.div`
 	font-size: 14px;
 	color: ${({ theme }) => theme.colors.text};

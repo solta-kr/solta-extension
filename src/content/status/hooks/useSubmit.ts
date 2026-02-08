@@ -8,7 +8,7 @@ export function useSubmit() {
 	const submit = useCallback(
 		async (
 			problemId: string,
-			solveTimeSeconds: number,
+			solveTimeSeconds: number | null,
 			solveType: 'SELF' | 'SOLUTION',
 		): Promise<boolean> => {
 			setSubmitting(true);

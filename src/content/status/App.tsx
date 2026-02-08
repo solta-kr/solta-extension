@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import type { ChromeMessage } from '../../shared/types/chrome-messages';
+import { useState, useCallback } from 'react';
 import type { SolvedAcProblemMeta } from '../../shared/types/solved-ac';
 import { fetchProblemMeta } from '../../shared/utils/solved-ac';
 import { useStatusWatcher } from './hooks/useStatusWatcher';
@@ -8,38 +7,37 @@ import SolvedModal from './components/SolvedModal/SolvedModal';
 interface ModalData {
 	problemId: string;
 	title: string;
-	elapsedMs: number;
+	elapsedMs: number | null;
 	meta: SolvedAcProblemMeta | null;
 }
 
 export default function App() {
 	const [modalData, setModalData] = useState<ModalData | null>(null);
 
-	useStatusWatcher();
-
-	useEffect(() => {
-		const listener = (message: ChromeMessage) => {
-			if (message.type === 'SHOW_SOLVED_MODAL') {
-				const { problemId, title, elapsedMs } = message.payload;
-
-				fetchProblemMeta(problemId)
-					.then((meta) => {
-						setModalData({ problemId, title, elapsedMs, meta });
-					})
-					.catch(() => {
-						setModalData({
-							problemId,
-							title,
-							elapsedMs,
-							meta: null,
-						});
+	const handleSolved = useCallback(
+		(problemId: string, elapsedMs: number | null) => {
+			fetchProblemMeta(problemId)
+				.then((meta) => {
+					setModalData({
+						problemId,
+						title: meta?.titleKo ?? '문제',
+						elapsedMs,
+						meta,
 					});
-			}
-		};
+				})
+				.catch(() => {
+					setModalData({
+						problemId,
+						title: '문제',
+						elapsedMs,
+						meta: null,
+					});
+				});
+		},
+		[],
+	);
 
-		chrome.runtime.onMessage.addListener(listener);
-		return () => chrome.runtime.onMessage.removeListener(listener);
-	}, []);
+	useStatusWatcher(handleSolved);
 
 	if (!modalData) return null;
 

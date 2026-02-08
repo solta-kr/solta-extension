@@ -1,14 +1,26 @@
 import { useState } from 'react';
-import { formatElapsedKorean } from '../../../../shared/utils/format-time';
 import type { SolvedAcProblemMeta } from '../../../../shared/types/solved-ac';
 import SolveTypeRadio from '../SolveTypeRadio/SolveTypeRadio';
 import { useSubmit } from '../../hooks/useSubmit';
 import * as S from './SolvedModal.styled';
 
+function msToHms(ms: number) {
+	const totalSec = Math.floor(ms / 1000);
+	return {
+		h: Math.floor(totalSec / 3600),
+		m: Math.floor((totalSec % 3600) / 60),
+		s: totalSec % 60,
+	};
+}
+
+function clamp(value: number, min: number, max: number) {
+	return Math.max(min, Math.min(max, value));
+}
+
 interface Props {
 	problemId: string;
 	title: string;
-	elapsedMs: number;
+	elapsedMs: number | null;
 	meta: SolvedAcProblemMeta | null;
 	onClose: () => void;
 }
@@ -20,6 +32,10 @@ export default function SolvedModal({
 	meta,
 	onClose,
 }: Props) {
+	const initial = elapsedMs != null ? msToHms(elapsedMs) : { h: 0, m: 0, s: 0 };
+	const [hours, setHours] = useState(String(initial.h));
+	const [minutes, setMinutes] = useState(String(initial.m));
+	const [seconds, setSeconds] = useState(String(initial.s));
 	const [solveType, setSolveType] = useState<'SELF' | 'SOLUTION'>('SELF');
 	const { submitting, submit } = useSubmit();
 
@@ -28,12 +44,34 @@ export default function SolvedModal({
 	const leftParts = [tierShort, ...tagList].filter(Boolean);
 	const bracket = leftParts.length > 0 ? `[${leftParts.join(', ')}] ` : '';
 
+	const handleTimeChange =
+		(setter: (v: string) => void, max: number) =>
+		(e: React.ChangeEvent<HTMLInputElement>) => {
+			const raw = e.target.value.replace(/\D/g, '');
+			if (raw === '') {
+				setter('');
+				return;
+			}
+			setter(String(clamp(Number(raw), 0, max)));
+		};
+
+	const handleTimeBlur =
+		(value: string, setter: (v: string) => void) => () => {
+			const n = Number(value);
+			setter(String(Number.isFinite(n) && n > 0 ? n : 0));
+		};
+
+	const getTotalSeconds = (): number | null => {
+		const h = Number(hours) || 0;
+		const m = Number(minutes) || 0;
+		const s = Number(seconds) || 0;
+		const total = h * 3600 + m * 60 + s;
+		return total > 0 ? total : null;
+	};
+
 	const handleSubmit = async () => {
-		const success = await submit(
-			problemId,
-			Math.floor(elapsedMs / 1000),
-			solveType,
-		);
+		const solveTimeSeconds = getTotalSeconds();
+		const success = await submit(problemId, solveTimeSeconds, solveType);
 		if (success) {
 			alert('성공적으로 저장되었습니다!');
 			onClose();
@@ -62,13 +100,56 @@ export default function SolvedModal({
 				</S.Header>
 
 				<S.SolveInfo>
-					<S.SolveTime>{formatElapsedKorean(elapsedMs)}</S.SolveTime>
 					<S.ProblemTitle>
 						{bracket}
 						{title || '문제'}
 					</S.ProblemTitle>
 					<S.ProblemMeta>백준 #{problemId}</S.ProblemMeta>
 				</S.SolveInfo>
+
+				<S.FieldGroup>
+					<S.FieldLabel>풀이 시간</S.FieldLabel>
+					<S.TimeInputGroup>
+						<S.TimeInputUnit>
+							<S.TimeInput
+								type="number"
+								min={0}
+								max={99}
+								value={hours}
+								onChange={handleTimeChange(setHours, 99)}
+								onBlur={handleTimeBlur(hours, setHours)}
+								placeholder="0"
+							/>
+							<S.TimeUnitLabel>시간</S.TimeUnitLabel>
+						</S.TimeInputUnit>
+						<S.TimeSeparator>:</S.TimeSeparator>
+						<S.TimeInputUnit>
+							<S.TimeInput
+								type="number"
+								min={0}
+								max={59}
+								value={minutes}
+								onChange={handleTimeChange(setMinutes, 59)}
+								onBlur={handleTimeBlur(minutes, setMinutes)}
+								placeholder="0"
+							/>
+							<S.TimeUnitLabel>분</S.TimeUnitLabel>
+						</S.TimeInputUnit>
+						<S.TimeSeparator>:</S.TimeSeparator>
+						<S.TimeInputUnit>
+							<S.TimeInput
+								type="number"
+								min={0}
+								max={59}
+								value={seconds}
+								onChange={handleTimeChange(setSeconds, 59)}
+								onBlur={handleTimeBlur(seconds, setSeconds)}
+								placeholder="0"
+							/>
+							<S.TimeUnitLabel>초</S.TimeUnitLabel>
+						</S.TimeInputUnit>
+					</S.TimeInputGroup>
+				</S.FieldGroup>
 
 				<S.FieldGroup>
 					<S.FieldLabel>풀이 방식</S.FieldLabel>

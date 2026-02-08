@@ -2,7 +2,7 @@ import { fetchWithAuth } from '../shared/utils/fetch-with-auth';
 
 export async function submitToServer(
 	problemId: string,
-	solveTimeSeconds: number,
+	solveTimeSeconds: number | null,
 	solveType: 'SELF' | 'SOLUTION',
 ): Promise<boolean> {
 	const response = await fetchWithAuth('/api/solveds', {

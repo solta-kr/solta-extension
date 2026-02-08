@@ -6,7 +6,7 @@ export type ChromeMessage =
 			type: 'SUBMIT_TO_SERVER';
 			payload: {
 				problemId: string;
-				solveTimeSeconds: number;
+				solveTimeSeconds: number | null;
 				solveType: 'SELF' | 'SOLUTION';
 			};
 	  }
@@ -15,7 +15,7 @@ export type ChromeMessage =
 			payload: {
 				problemId: string;
 				title: string;
-				elapsedMs: number;
+				elapsedMs: number | null;
 			};
 	  };
 

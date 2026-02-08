@@ -20,27 +20,7 @@ export function handleMessage(
 		case 'STOP_TIMER_IF_RUNNING': {
 			const { problemId } = message.payload;
 			if (!problemId) return;
-			const timer = stopTimer(problemId);
-			if (timer) {
-				const elapsedMs = Date.now() - timer.startedAtMs;
-				chrome.tabs.query(
-					{ active: true, currentWindow: true },
-					(tabs) => {
-						const tab = tabs[0];
-						if (tab?.id) {
-							chrome.tabs.sendMessage(
-								tab.id,
-								{
-									type: 'SHOW_SOLVED_MODAL',
-									payload: { problemId, title: timer.title, elapsedMs },
-								},
-								// 수신자가 없을 수 있음 (문제 페이지에는 리스너 없음)
-								() => void chrome.runtime.lastError,
-							);
-						}
-					},
-				);
-			}
+			stopTimer(problemId);
 			break;
 		}
 
