@@ -13,3 +13,17 @@ export function mapTierToShort(level: number): string {
 	if (!entry) return '';
 	return `${entry[0]}${entry[1]}`;
 }
+
+const TIER_COLORS: Record<string, string> = {
+	B: '#cd7f32',
+	S: '#c0c0c0',
+	G: '#ffd700',
+	P: '#e5e4e2',
+	D: '#b9f2ff',
+	R: '#ff006e',
+};
+
+export function getTierColor(levelShort: string): string {
+	const group = levelShort.charAt(0).toUpperCase();
+	return TIER_COLORS[group] ?? '#8A8D91';
+}

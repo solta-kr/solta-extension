@@ -17,7 +17,8 @@ export type ChromeMessage =
 				title: string;
 				elapsedMs: number | null;
 			};
-	  };
+	  }
+	| { type: 'FETCH_PROBLEM_META'; payload: { problemId: string } };
 
 export interface TimerStateResponse {
 	running: boolean;

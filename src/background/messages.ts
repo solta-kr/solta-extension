@@ -1,6 +1,7 @@
 import type { ChromeMessage } from '../shared/types/chrome-messages';
 import { startTimer, stopTimer, getTimer, restoreTimerSync } from './timer-manager';
 import { submitToServer } from './api';
+import { fetchProblemMeta } from '../shared/utils/solved-ac';
 
 export function handleMessage(
 	message: ChromeMessage,
@@ -58,6 +59,14 @@ export function handleMessage(
 				.catch((error: Error) =>
 					sendResponse({ success: false, error: error.message }),
 				);
+			return true; // async sendResponse
+		}
+
+		case 'FETCH_PROBLEM_META': {
+			const { problemId } = message.payload;
+			fetchProblemMeta(problemId)
+				.then((meta) => sendResponse({ meta }))
+				.catch(() => sendResponse({ meta: null }));
 			return true; // async sendResponse
 		}
 	}

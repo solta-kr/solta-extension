@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import type { SolvedAcProblemMeta } from '../../shared/types/solved-ac';
-import { fetchProblemMeta } from '../../shared/utils/solved-ac';
+import { sendMessageAsync } from '../../shared/utils/chrome-messaging';
 import { useStatusWatcher } from './hooks/useStatusWatcher';
 import SolvedModal from './components/SolvedModal/SolvedModal';
 
@@ -11,13 +11,21 @@ interface ModalData {
 	meta: SolvedAcProblemMeta | null;
 }
 
+interface FetchMetaResponse {
+	meta: SolvedAcProblemMeta | null;
+}
+
 export default function App() {
 	const [modalData, setModalData] = useState<ModalData | null>(null);
 
 	const handleSolved = useCallback(
 		(problemId: string, elapsedMs: number | null) => {
-			fetchProblemMeta(problemId)
-				.then((meta) => {
+			sendMessageAsync<FetchMetaResponse>({
+				type: 'FETCH_PROBLEM_META',
+				payload: { problemId },
+			})
+				.then((res) => {
+					const meta = res?.meta ?? null;
 					setModalData({
 						problemId,
 						title: meta?.titleKo ?? '문제',

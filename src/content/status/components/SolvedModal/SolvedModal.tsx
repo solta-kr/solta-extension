@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { SolvedAcProblemMeta } from '../../../../shared/types/solved-ac';
+import { getTierColor } from '../../../../shared/utils/tier';
 import SolveTypeRadio from '../SolveTypeRadio/SolveTypeRadio';
 import { useSubmit } from '../../hooks/useSubmit';
 import * as S from './SolvedModal.styled';
@@ -40,9 +41,8 @@ export default function SolvedModal({
 	const { submitting, submit } = useSubmit();
 
 	const tierShort = meta?.levelShort ?? '';
+	const tierColor = getTierColor(tierShort);
 	const tagList = meta?.tags?.filter(Boolean) ?? [];
-	const leftParts = [tierShort, ...tagList].filter(Boolean);
-	const bracket = leftParts.length > 0 ? `[${leftParts.join(', ')}] ` : '';
 
 	const handleTimeChange =
 		(setter: (v: string) => void, max: number) =>
@@ -100,11 +100,30 @@ export default function SolvedModal({
 				</S.Header>
 
 				<S.SolveInfo>
-					<S.ProblemTitle>
-						{bracket}
-						{title || '문제'}
-					</S.ProblemTitle>
-					<S.ProblemMeta>백준 #{problemId}</S.ProblemMeta>
+					<S.TierBar $color={tierColor} />
+					<S.ProblemContent>
+						<S.ProblemHeader>
+							<S.ProblemNumber>#{problemId}</S.ProblemNumber>
+							{tierShort && (
+								<S.TierBadge $color={tierColor}>
+									{tierShort}
+								</S.TierBadge>
+							)}
+						</S.ProblemHeader>
+						<S.ProblemTitle>
+							{title || '문제'}
+						</S.ProblemTitle>
+						{tagList.length > 0 && (
+							<S.TagList>
+								{tagList.slice(0, 4).map((tag) => (
+									<S.Tag key={tag}>{tag}</S.Tag>
+								))}
+								{tagList.length > 4 && (
+									<S.Tag>+{tagList.length - 4}</S.Tag>
+								)}
+							</S.TagList>
+						)}
+					</S.ProblemContent>
 				</S.SolveInfo>
 
 				<S.FieldGroup>

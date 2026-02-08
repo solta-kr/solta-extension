@@ -85,17 +85,81 @@ export const SolveInfo = styled.div`
 	background: ${({ theme }) => theme.colors.bg};
 	border: 1px solid ${({ theme }) => theme.colors.border};
 	border-radius: ${({ theme }) => theme.borderRadius.md};
-	padding: 20px;
+	padding: 14px 16px;
 	margin-bottom: 20px;
-	text-align: center;
+	display: flex;
+	align-items: center;
+	gap: 12px;
 `;
 
-export const SolveTime = styled.div`
-	font-size: 28px;
-	font-weight: 700;
-	color: ${({ theme }) => theme.colors.primary};
-	margin-bottom: 8px;
-	letter-spacing: -0.5px;
+export const TierBar = styled.div<{ $color: string }>`
+	width: 6px;
+	height: 36px;
+	border-radius: 3px;
+	background: ${({ $color }) => $color};
+	flex-shrink: 0;
+`;
+
+export const ProblemContent = styled.div`
+	flex: 1;
+	min-width: 0;
+`;
+
+export const ProblemHeader = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 4px;
+`;
+
+export const ProblemNumber = styled.span`
+	font-size: 12px;
+	font-weight: 500;
+	color: ${({ theme }) => theme.colors.textMuted};
+	flex-shrink: 0;
+`;
+
+export const TierBadge = styled.span<{ $color: string }>`
+	display: inline-block;
+	padding: 1px 7px;
+	border-radius: 4px;
+	font-size: 11px;
+	font-weight: 600;
+	border: 1px solid ${({ $color }) => $color};
+	color: ${({ $color }) => $color};
+	background: transparent;
+	flex-shrink: 0;
+`;
+
+export const ProblemTitle = styled.div`
+	font-size: 14px;
+	color: ${({ theme }) => theme.colors.text};
+	font-weight: 500;
+	margin-bottom: 6px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+`;
+
+export const TagList = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+	gap: 5px;
+`;
+
+export const Tag = styled.span`
+	padding: 2px 8px;
+	font-size: 11px;
+	font-weight: 500;
+	border-radius: 6px;
+	background: ${({ theme }) => theme.colors.bgTertiary};
+	color: ${({ theme }) => theme.colors.textSecondary};
+	white-space: nowrap;
+`;
+
+export const ProblemMeta = styled.div`
+	font-size: 12px;
+	color: ${({ theme }) => theme.colors.textMuted};
 `;
 
 export const TimeInputGroup = styled.div`
@@ -158,18 +222,6 @@ export const TimeSeparator = styled.span`
 	font-weight: 700;
 	color: ${({ theme }) => theme.colors.textMuted};
 	padding-bottom: 18px;
-`;
-
-export const ProblemTitle = styled.div`
-	font-size: 14px;
-	color: ${({ theme }) => theme.colors.text};
-	font-weight: 500;
-	margin-bottom: 4px;
-`;
-
-export const ProblemMeta = styled.div`
-	font-size: 12px;
-	color: ${({ theme }) => theme.colors.textMuted};
 `;
 
 export const FieldLabel = styled.div`
