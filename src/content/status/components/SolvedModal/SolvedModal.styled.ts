@@ -229,6 +229,18 @@ export const FieldLabel = styled.div`
 	font-weight: 500;
 	color: ${({ theme }) => theme.colors.textSecondary};
 	margin-bottom: 8px;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+`;
+
+export const OptionalBadge = styled.span`
+	font-size: 11px;
+	font-weight: 500;
+	color: ${({ theme }) => theme.colors.textMuted};
+	background: ${({ theme }) => theme.colors.bgTertiary};
+	padding: 1px 6px;
+	border-radius: 4px;
 `;
 
 export const FieldGroup = styled.div`

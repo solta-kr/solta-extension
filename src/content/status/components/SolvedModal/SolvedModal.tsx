@@ -127,7 +127,12 @@ export default function SolvedModal({
 				</S.SolveInfo>
 
 				<S.FieldGroup>
-					<S.FieldLabel>풀이 시간</S.FieldLabel>
+					<S.FieldLabel>
+						풀이 시간
+						{solveType === 'SOLUTION' && (
+							<S.OptionalBadge>선택</S.OptionalBadge>
+						)}
+					</S.FieldLabel>
 					<S.TimeInputGroup>
 						<S.TimeInputUnit>
 							<S.TimeInput
