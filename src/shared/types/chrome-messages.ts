@@ -18,7 +18,9 @@ export type ChromeMessage =
 				elapsedMs: number | null;
 			};
 	  }
-	| { type: 'FETCH_PROBLEM_META'; payload: { problemId: string } };
+	| { type: 'FETCH_PROBLEM_META'; payload: { problemId: string } }
+	| { type: 'CHECK_AUTH' }
+	| { type: 'LOGIN' };
 
 export interface TimerStateResponse {
 	running: boolean;
@@ -26,6 +28,15 @@ export interface TimerStateResponse {
 }
 
 export interface SubmitResponse {
+	success: boolean;
+	error?: string;
+}
+
+export interface CheckAuthResponse {
+	loggedIn: boolean;
+}
+
+export interface LoginResponse {
 	success: boolean;
 	error?: string;
 }

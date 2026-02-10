@@ -284,6 +284,22 @@ export const PrimaryButton = styled(BaseButton)`
 	}
 `;
 
+export const LoginRequiredButton = styled(BaseButton)`
+	background: ${({ theme }) => theme.colors.bgTertiary};
+	color: ${({ theme }) => theme.colors.textMuted};
+	border: 1px solid ${({ theme }) => theme.colors.border};
+
+	&:hover:not(:disabled) {
+		background: ${({ theme }) => theme.colors.bgTertiary};
+		color: ${({ theme }) => theme.colors.textSecondary};
+	}
+
+	&:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
+`;
+
 export const SecondaryButton = styled(BaseButton)`
 	background: transparent;
 	color: ${({ theme }) => theme.colors.textSecondary};

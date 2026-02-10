@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { SolvedAcProblemMeta } from '../../../../shared/types/solved-ac';
+import type { CheckAuthResponse, LoginResponse } from '../../../../shared/types/chrome-messages';
 import { getTierColor } from '../../../../shared/utils/tier';
+import { sendMessageAsync } from '../../../../shared/utils/chrome-messaging';
 import SolveTypeRadio from '../SolveTypeRadio/SolveTypeRadio';
 import { useSubmit } from '../../hooks/useSubmit';
 import * as S from './SolvedModal.styled';
@@ -38,7 +40,14 @@ export default function SolvedModal({
 	const [minutes, setMinutes] = useState(String(initial.m));
 	const [seconds, setSeconds] = useState(String(initial.s));
 	const [solveType, setSolveType] = useState<'SELF' | 'SOLUTION'>('SELF');
+	const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
 	const { submitting, submit } = useSubmit();
+
+	useEffect(() => {
+		sendMessageAsync<CheckAuthResponse>({ type: 'CHECK_AUTH' })
+			.then((res) => setLoggedIn(res?.loggedIn ?? false))
+			.catch(() => setLoggedIn(false));
+	}, []);
 
 	const tierShort = meta?.levelShort ?? '';
 	const tierColor = getTierColor(tierShort);
@@ -67,6 +76,20 @@ export default function SolvedModal({
 		const s = Number(seconds) || 0;
 		const total = h * 3600 + m * 60 + s;
 		return total > 0 ? total : null;
+	};
+
+	const [loggingIn, setLoggingIn] = useState(false);
+
+	const handleLogin = async () => {
+		setLoggingIn(true);
+		try {
+			const res = await sendMessageAsync<LoginResponse>({ type: 'LOGIN' });
+			if (res?.success) {
+				setLoggedIn(true);
+			}
+		} finally {
+			setLoggingIn(false);
+		}
 	};
 
 	const handleSubmit = async () => {
@@ -184,12 +207,25 @@ export default function SolvedModal({
 					<S.SecondaryButton onClick={onClose}>
 						취소
 					</S.SecondaryButton>
-					<S.PrimaryButton
-						onClick={handleSubmit}
-						disabled={submitting}
-					>
-						{submitting ? '저장 중...' : '저장하기'}
-					</S.PrimaryButton>
+					{loggedIn === false ? (
+						<S.LoginRequiredButton
+							onClick={handleLogin}
+							disabled={loggingIn}
+						>
+							{loggingIn ? '로그인 중...' : '로그인 후 저장하기'}
+						</S.LoginRequiredButton>
+					) : (
+						<S.PrimaryButton
+							onClick={handleSubmit}
+							disabled={submitting || loggedIn === null}
+						>
+							{loggedIn === null
+								? '확인 중...'
+								: submitting
+									? '저장 중...'
+									: '저장하기'}
+						</S.PrimaryButton>
+					)}
 				</S.Actions>
 			</S.Modal>
 		</S.Overlay>
