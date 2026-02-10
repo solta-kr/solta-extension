@@ -1,3 +1,4 @@
+import { CLIENT_URL } from '../../../shared/constants/config';
 import * as S from './UserInfo.styled';
 
 interface Props {
@@ -10,7 +11,7 @@ export default function UserInfo({ name, avatarUrl, onLogout }: Props) {
 	return (
 		<S.Wrapper>
 			<S.Container
-				href={`https://solta.kr/profile/${name}`}
+				href={`${CLIENT_URL}/profile/${name}`}
 				target="_blank"
 				rel="noopener noreferrer"
 			>

@@ -1,20 +1,17 @@
 {
   "manifest_version": 3,
-  "name": "Baekjoon Solve Timer",
-  "version": "1.0",
+  "name": "Solta",
+  "version": "1.0.0",
   "description": "백준 문제 풀이 시간을 측정하고 Solta에 기록하는 확장 프로그램",
   "permissions": [
     "storage",
-    "notifications",
     "activeTab",
     "identity"
   ],
   "host_permissions": [
     "https://www.acmicpc.net/*",
     "https://solved.ac/*",
-    "http://localhost:8080/*",
-    "http://*/*",
-    "https://*/*"
+    "https://prod.solta.kr/*"
   ],
   "background": {
     "service_worker": "src/background/index.ts",
@@ -38,6 +35,12 @@
   },
   "action": {
     "default_popup": "src/popup/index.html",
-    "default_title": "Baekjoon Solve Timer"
+    "default_title": "Baekjoon Solve Timer",
+    "default_icon": {
+      "16": "public/images/icon-16.png",
+      "32": "public/images/icon-32.png",
+      "48": "public/images/icon-48.png",
+      "128": "public/images/icon-128.png"
+    }
   }
 }

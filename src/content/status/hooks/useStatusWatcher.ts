@@ -109,29 +109,31 @@ export function useStatusWatcher(
 				sendMessageAsync<TimerStateResponse>({
 					type: 'GET_TIMER_STATE',
 					payload: { problemId: pid },
-				}).then((state) => {
-					if (state?.running && state.startedAtMs) {
-						// 타이머 실행 중: 타이머 시작 이후 제출인 경우 처리
-						const startedAtSec = Math.floor(
-							state.startedAtMs / 1000,
-						);
-						const rowTs = extractRowTimestampSec(tr);
-						if (rowTs && rowTs >= startedAtSec) {
+				})
+					.then((state) => {
+						if (state?.running && state.startedAtMs) {
+							// 타이머 실행 중: 타이머 시작 이후 제출인 경우 처리
+							const startedAtSec = Math.floor(
+								state.startedAtMs / 1000,
+							);
+							const rowTs = extractRowTimestampSec(tr);
+							if (rowTs && rowTs >= startedAtSec) {
+								lastHandledRef.current = solutionId;
+								const elapsedMs =
+									Date.now() - state.startedAtMs;
+								sendMessage({
+									type: 'STOP_TIMER_IF_RUNNING',
+									payload: { problemId: pid },
+								});
+								onSolvedRef.current(pid, elapsedMs);
+							}
+						} else if (isNewlyAc) {
+							// 타이머 미사용: 채점 중 → AC로 새로 전환된 경우만 처리
 							lastHandledRef.current = solutionId;
-							const elapsedMs =
-								Date.now() - state.startedAtMs;
-							sendMessage({
-								type: 'STOP_TIMER_IF_RUNNING',
-								payload: { problemId: pid },
-							});
-							onSolvedRef.current(pid, elapsedMs);
+							onSolvedRef.current(pid, null);
 						}
-					} else if (isNewlyAc) {
-						// 타이머 미사용: 채점 중 → AC로 새로 전환된 경우만 처리
-						lastHandledRef.current = solutionId;
-						onSolvedRef.current(pid, null);
-					}
-				});
+					})
+					.catch(() => {});
 
 				break;
 			}
