@@ -1,19 +1,34 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const Wrapper = styled.div`
+	margin-bottom: 16px;
+	background: ${({ theme }) => theme.colors.bgSecondary};
+	border: 1px solid ${({ theme }) => theme.colors.border};
+	border-radius: ${({ theme }) => theme.borderRadius.md};
+	overflow: hidden;
+`;
+
+export const Container = styled.a`
 	display: flex;
 	align-items: center;
 	gap: 12px;
 	padding: 14px;
-	background: ${({ theme }) => theme.colors.bgSecondary};
-	border: 1px solid ${({ theme }) => theme.colors.border};
-	border-radius: ${({ theme }) => theme.borderRadius.md};
-	margin-bottom: 16px;
-	transition: border-color 0.2s ease;
+	text-decoration: none;
+	color: inherit;
+	transition: background 0.15s ease;
+	cursor: pointer;
 
 	&:hover {
-		border-color: ${({ theme }) => theme.colors.borderLight};
+		background: ${({ theme }) => theme.colors.bgTertiary};
 	}
+`;
+
+export const Footer = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 8px 14px;
+	border-top: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
 export const AvatarRing = styled.div`
@@ -50,6 +65,12 @@ export const Username = styled.div`
 	color: ${({ theme }) => theme.colors.textMuted};
 	font-size: 12px;
 	margin-top: 1px;
+`;
+
+export const ProfileHint = styled.span`
+	font-size: 11px;
+	color: ${({ theme }) => theme.colors.textMuted};
+	font-weight: 400;
 `;
 
 export const LogoutButton = styled.button`

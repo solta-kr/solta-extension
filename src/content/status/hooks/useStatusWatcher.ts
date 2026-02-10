@@ -14,7 +14,13 @@ function getUserIdFromQuery(): string | null {
 
 function isRowAccepted(tr: HTMLTableRowElement): boolean {
 	const resultSpan = tr.querySelector('.result-text');
-	return !!resultSpan?.classList.contains('result-ac');
+	if (!resultSpan) return false;
+	if (resultSpan.classList.contains('result-ac')) return true;
+	const text = (resultSpan.textContent ?? '').trim();
+	if (text.includes('맞았습니다')) return true;
+	if (text === 'Accepted') return true;
+	if (/100/.test(text)) return true;
+	return false;
 }
 
 function extractRowProblemId(tr: HTMLTableRowElement): string | null {

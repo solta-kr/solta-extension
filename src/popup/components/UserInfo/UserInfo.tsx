@@ -8,15 +8,23 @@ interface Props {
 
 export default function UserInfo({ name, avatarUrl, onLogout }: Props) {
 	return (
-		<S.Container>
-			<S.AvatarRing>
-				<S.Avatar src={avatarUrl} alt={name} />
-			</S.AvatarRing>
-			<S.Details>
-				<S.Name>{name}</S.Name>
-				<S.Username>@{name}</S.Username>
-			</S.Details>
-			<S.LogoutButton onClick={onLogout}>로그아웃</S.LogoutButton>
-		</S.Container>
+		<S.Wrapper>
+			<S.Container
+				href={`https://solta.kr/profile/${name}`}
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				<S.AvatarRing>
+					<S.Avatar src={avatarUrl} alt={name} />
+				</S.AvatarRing>
+				<S.Details>
+					<S.Name>{name}</S.Name>
+					<S.ProfileHint>프로필 보기 &rarr;</S.ProfileHint>
+				</S.Details>
+			</S.Container>
+			<S.Footer>
+				<S.LogoutButton onClick={onLogout}>로그아웃</S.LogoutButton>
+			</S.Footer>
+		</S.Wrapper>
 	);
 }

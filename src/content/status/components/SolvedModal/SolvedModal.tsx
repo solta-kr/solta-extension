@@ -79,6 +79,16 @@ export default function SolvedModal({
 	};
 
 	const [loggingIn, setLoggingIn] = useState(false);
+	const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+
+	const showToast = (message: string, type: 'success' | 'error') => {
+		setToast({ message, type });
+		if (type === 'success') {
+			setTimeout(() => onClose(), 1500);
+		} else {
+			setTimeout(() => setToast(null), 3000);
+		}
+	};
 
 	const handleLogin = async () => {
 		setLoggingIn(true);
@@ -96,10 +106,9 @@ export default function SolvedModal({
 		const solveTimeSeconds = getTotalSeconds();
 		const success = await submit(problemId, solveTimeSeconds, solveType);
 		if (success) {
-			alert('성공적으로 저장되었습니다!');
-			onClose();
+			showToast('저장되었습니다!', 'success');
 		} else {
-			alert('저장에 실패했습니다. 다시 시도해주세요.');
+			showToast('저장에 실패했습니다. 다시 시도해주세요.', 'error');
 		}
 	};
 
@@ -227,6 +236,10 @@ export default function SolvedModal({
 						</S.PrimaryButton>
 					)}
 				</S.Actions>
+
+				{toast && (
+					<S.Toast $type={toast.type}>{toast.message}</S.Toast>
+				)}
 			</S.Modal>
 		</S.Overlay>
 	);

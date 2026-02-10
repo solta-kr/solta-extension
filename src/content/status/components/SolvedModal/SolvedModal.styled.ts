@@ -300,6 +300,27 @@ export const LoginRequiredButton = styled(BaseButton)`
 	}
 `;
 
+const toastIn = keyframes`
+	from { transform: translateY(8px); opacity: 0; }
+	to { transform: translateY(0); opacity: 1; }
+`;
+
+export const Toast = styled.div<{ $type: 'success' | 'error' }>`
+	margin-top: 12px;
+	padding: 10px 14px;
+	border-radius: ${({ theme }) => theme.borderRadius.sm};
+	font-size: 13px;
+	font-weight: 500;
+	text-align: center;
+	animation: ${toastIn} 0.2s ease-out;
+	background: ${({ $type, theme }) =>
+		$type === 'success' ? theme.colors.primaryLight : 'rgba(239, 68, 68, 0.1)'};
+	color: ${({ $type, theme }) =>
+		$type === 'success' ? theme.colors.primary : '#ef4444'};
+	border: 1px solid ${({ $type, theme }) =>
+		$type === 'success' ? theme.colors.primary : '#ef4444'}20;
+`;
+
 export const SecondaryButton = styled(BaseButton)`
 	background: transparent;
 	color: ${({ theme }) => theme.colors.textSecondary};
