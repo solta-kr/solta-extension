@@ -10,12 +10,13 @@ export function useSubmit() {
 			problemId: string,
 			solveTimeSeconds: number | null,
 			solveType: 'SELF' | 'SOLUTION',
+			memo?: string | null,
 		): Promise<boolean> => {
 			setSubmitting(true);
 			try {
 				const response = await sendMessageAsync<SubmitResponse>({
 					type: 'SUBMIT_TO_SERVER',
-					payload: { problemId, solveTimeSeconds, solveType },
+					payload: { problemId, solveTimeSeconds, solveType, memo },
 				});
 				return response.success;
 			} catch {

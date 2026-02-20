@@ -8,6 +8,7 @@ export type ChromeMessage =
 				problemId: string;
 				solveTimeSeconds: number | null;
 				solveType: 'SELF' | 'SOLUTION';
+				memo?: string | null;
 			};
 	  }
 	| {

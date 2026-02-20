@@ -4,6 +4,7 @@ export async function submitToServer(
 	problemId: string,
 	solveTimeSeconds: number | null,
 	solveType: 'SELF' | 'SOLUTION',
+	memo?: string | null,
 ): Promise<boolean> {
 	const response = await fetchWithAuth('/api/solveds', {
 		method: 'POST',
@@ -11,6 +12,7 @@ export async function submitToServer(
 			solveType: solveType || 'SELF',
 			bojProblemId: parseInt(problemId),
 			solveTimeSeconds,
+			memo: memo?.trim() || null,
 		}),
 	});
 

@@ -54,8 +54,8 @@ export function handleMessage(
 		}
 
 		case 'SUBMIT_TO_SERVER': {
-			const { problemId, solveTimeSeconds, solveType } = message.payload;
-			submitToServer(problemId, solveTimeSeconds, solveType)
+			const { problemId, solveTimeSeconds, solveType, memo } = message.payload;
+			submitToServer(problemId, solveTimeSeconds, solveType, memo)
 				.then((success) => sendResponse({ success }))
 				.catch((error: Error) =>
 					sendResponse({ success: false, error: error.message }),
