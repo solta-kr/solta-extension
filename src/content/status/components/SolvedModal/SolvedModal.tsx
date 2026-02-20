@@ -40,6 +40,8 @@ export default function SolvedModal({
 	const [minutes, setMinutes] = useState(String(initial.m));
 	const [seconds, setSeconds] = useState(String(initial.s));
 	const [solveType, setSolveType] = useState<'SELF' | 'SOLUTION'>('SELF');
+	const [includeTime, setIncludeTime] = useState(true);
+	const [memo, setMemo] = useState('');
 	const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
 	const { submitting, submit } = useSubmit();
 
@@ -103,8 +105,8 @@ export default function SolvedModal({
 	};
 
 	const handleSubmit = async () => {
-		const solveTimeSeconds = getTotalSeconds();
-		const success = await submit(problemId, solveTimeSeconds, solveType);
+		const solveTimeSeconds = solveType === 'SOLUTION' && !includeTime ? null : getTotalSeconds();
+		const success = await submit(problemId, solveTimeSeconds, solveType, memo);
 		if (success) {
 			showToast('저장되었습니다!', 'success');
 		} else {
@@ -165,51 +167,79 @@ export default function SolvedModal({
 							<S.OptionalBadge>선택</S.OptionalBadge>
 						)}
 					</S.FieldLabel>
-					<S.TimeInputGroup>
-						<S.TimeInputUnit>
-							<S.TimeInput
-								type="number"
-								min={0}
-								max={99}
-								value={hours}
-								onChange={handleTimeChange(setHours, 99)}
-								onBlur={handleTimeBlur(hours, setHours)}
-								placeholder="0"
+					{solveType === 'SOLUTION' && (
+						<S.TimeToggle>
+							<S.TimeToggleCheckbox
+								id="include-time"
+								type="checkbox"
+								checked={includeTime}
+								onChange={(e) => setIncludeTime(e.target.checked)}
 							/>
-							<S.TimeUnitLabel>시간</S.TimeUnitLabel>
-						</S.TimeInputUnit>
-						<S.TimeSeparator>:</S.TimeSeparator>
-						<S.TimeInputUnit>
-							<S.TimeInput
-								type="number"
-								min={0}
-								max={59}
-								value={minutes}
-								onChange={handleTimeChange(setMinutes, 59)}
-								onBlur={handleTimeBlur(minutes, setMinutes)}
-								placeholder="0"
-							/>
-							<S.TimeUnitLabel>분</S.TimeUnitLabel>
-						</S.TimeInputUnit>
-						<S.TimeSeparator>:</S.TimeSeparator>
-						<S.TimeInputUnit>
-							<S.TimeInput
-								type="number"
-								min={0}
-								max={59}
-								value={seconds}
-								onChange={handleTimeChange(setSeconds, 59)}
-								onBlur={handleTimeBlur(seconds, setSeconds)}
-								placeholder="0"
-							/>
-							<S.TimeUnitLabel>초</S.TimeUnitLabel>
-						</S.TimeInputUnit>
-					</S.TimeInputGroup>
+							<S.TimeToggleLabel htmlFor="include-time">
+								시간 기록하기
+							</S.TimeToggleLabel>
+						</S.TimeToggle>
+					)}
+					{(solveType === 'SELF' || includeTime) && (
+						<S.TimeInputGroup>
+							<S.TimeInputUnit>
+								<S.TimeInput
+									type="number"
+									min={0}
+									max={99}
+									value={hours}
+									onChange={handleTimeChange(setHours, 99)}
+									onBlur={handleTimeBlur(hours, setHours)}
+									placeholder="0"
+								/>
+								<S.TimeUnitLabel>시간</S.TimeUnitLabel>
+							</S.TimeInputUnit>
+							<S.TimeSeparator>:</S.TimeSeparator>
+							<S.TimeInputUnit>
+								<S.TimeInput
+									type="number"
+									min={0}
+									max={59}
+									value={minutes}
+									onChange={handleTimeChange(setMinutes, 59)}
+									onBlur={handleTimeBlur(minutes, setMinutes)}
+									placeholder="0"
+								/>
+								<S.TimeUnitLabel>분</S.TimeUnitLabel>
+							</S.TimeInputUnit>
+							<S.TimeSeparator>:</S.TimeSeparator>
+							<S.TimeInputUnit>
+								<S.TimeInput
+									type="number"
+									min={0}
+									max={59}
+									value={seconds}
+									onChange={handleTimeChange(setSeconds, 59)}
+									onBlur={handleTimeBlur(seconds, setSeconds)}
+									placeholder="0"
+								/>
+								<S.TimeUnitLabel>초</S.TimeUnitLabel>
+							</S.TimeInputUnit>
+						</S.TimeInputGroup>
+					)}
 				</S.FieldGroup>
 
 				<S.FieldGroup>
 					<S.FieldLabel>풀이 방식</S.FieldLabel>
 					<SolveTypeRadio value={solveType} onChange={setSolveType} />
+				</S.FieldGroup>
+
+				<S.FieldGroup>
+					<S.FieldLabel>
+						메모
+						<S.OptionalBadge>선택</S.OptionalBadge>
+					</S.FieldLabel>
+					<S.MemoTextarea
+						value={memo}
+						onChange={(e) => setMemo(e.target.value)}
+						placeholder="풀이 메모를 남겨보세요..."
+						rows={3}
+					/>
 				</S.FieldGroup>
 
 				<S.Actions>

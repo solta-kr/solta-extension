@@ -162,6 +162,28 @@ export const ProblemMeta = styled.div`
 	color: ${({ theme }) => theme.colors.textMuted};
 `;
 
+export const TimeToggle = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 12px;
+`;
+
+export const TimeToggleCheckbox = styled.input`
+	width: 16px;
+	height: 16px;
+	accent-color: ${({ theme }) => theme.colors.primary};
+	cursor: pointer;
+	flex-shrink: 0;
+`;
+
+export const TimeToggleLabel = styled.label`
+	font-size: 13px;
+	color: ${({ theme }) => theme.colors.textSecondary};
+	cursor: pointer;
+	user-select: none;
+`;
+
 export const TimeInputGroup = styled.div`
 	display: flex;
 	align-items: center;
@@ -245,6 +267,31 @@ export const OptionalBadge = styled.span`
 
 export const FieldGroup = styled.div`
 	margin-bottom: 20px;
+`;
+
+export const MemoTextarea = styled.textarea`
+	width: 100%;
+	padding: 10px 12px;
+	border: 1px solid ${({ theme }) => theme.colors.border};
+	border-radius: ${({ theme }) => theme.borderRadius.sm};
+	background: ${({ theme }) => theme.colors.bg};
+	color: ${({ theme }) => theme.colors.text};
+	font-size: 13px;
+	font-family: ${({ theme }) => theme.fonts.base};
+	line-height: 1.5;
+	resize: vertical;
+	box-sizing: border-box;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+	&:focus {
+		outline: none;
+		border-color: ${({ theme }) => theme.colors.primary};
+		box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.primaryLight};
+	}
+
+	&::placeholder {
+		color: ${({ theme }) => theme.colors.textMuted};
+	}
 `;
 
 export const Actions = styled.div`
