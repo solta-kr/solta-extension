@@ -15,15 +15,15 @@ export function mapTierToShort(level: number): string {
 }
 
 const TIER_COLORS: Record<string, string> = {
-	B: '#cd7f32',
-	S: '#c0c0c0',
-	G: '#ffd700',
-	P: '#e5e4e2',
-	D: '#b9f2ff',
-	R: '#ff006e',
+	B: 'hsl(30, 70%, 45%)',
+	S: 'hsl(210, 15%, 60%)',
+	G: 'hsl(45, 100%, 50%)',
+	P: 'hsl(175, 60%, 55%)',
+	D: 'hsl(200, 100%, 65%)',
+	R: 'hsl(350, 85%, 55%)',
 };
 
 export function getTierColor(levelShort: string): string {
 	const group = levelShort.charAt(0).toUpperCase();
-	return TIER_COLORS[group] ?? '#8A8D91';
+	return TIER_COLORS[group] ?? 'hsl(0, 0%, 50%)';
 }
