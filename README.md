@@ -3,7 +3,7 @@
 > 백준 문제 풀이 시간을 자동으로 측정하고 [Solta](https://solta.kr)에 기록하는 Chrome 확장 프로그램
 
 [![Version](https://img.shields.io/badge/version-1.1.0-blue)](https://github.com/solta-kr/solta-extension/releases)
-[![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-설치하기-yellow?logo=google-chrome)](https://chromewebstore.google.com/detail/boj-performance/bklabnmnfggmenngdnlndikconflcbij)
+[![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-설치하기-yellow?logo=google-chrome)](https://chromewebstore.google.com/detail/solta/ncfnchkjdgkjflhpolopadiapophnhfp)
 
 ---
 
@@ -23,10 +23,6 @@
 - **풀이 방식 선택** — `스스로 풀기` / `풀이 참고` 중 선택해 기록할 수 있습니다.
 - **풀이 메모** — 핵심 아이디어나 놓친 점을 간단히 메모로 남길 수 있습니다.
 - **solved.ac 티어 표시** — 문제 티어를 색상으로 확인할 수 있습니다.
-
-## 설치 방법
-
-[Chrome 웹 스토어에서 설치하기](https://chromewebstore.google.com/detail/boj-performance/bklabnmnfggmenngdnlndikconflcbij)
 
 ## 사용 방법
 
@@ -51,5 +47,5 @@
 ## 관련 링크
 
 - 웹사이트: [solta.kr](https://solta.kr)
-- Chrome 웹 스토어: [설치 페이지](https://chromewebstore.google.com/detail/boj-performance/bklabnmnfggmenngdnlndikconflcbij)
+- Chrome 웹 스토어: [설치 페이지](https://chromewebstore.google.com/detail/solta/ncfnchkjdgkjflhpolopadiapophnhfp)
 - 문의 및 버그 리포트: [GitHub Issues](https://github.com/solta-kr/solta-extension/issues)
