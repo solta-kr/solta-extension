@@ -80,6 +80,7 @@ export default function SolvedModal({
 		return total > 0 ? total : null;
 	};
 
+	const [submitted, setSubmitted] = useState(false);
 	const [loggingIn, setLoggingIn] = useState(false);
 	const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
@@ -108,6 +109,7 @@ export default function SolvedModal({
 		const solveTimeSeconds = solveType === 'SOLUTION' && !includeTime ? null : getTotalSeconds();
 		const success = await submit(problemId, solveTimeSeconds, solveType, memo);
 		if (success) {
+			setSubmitted(true);
 			showToast('저장되었습니다!', 'success');
 		} else {
 			showToast('저장에 실패했습니다. 다시 시도해주세요.', 'error');
@@ -256,13 +258,15 @@ export default function SolvedModal({
 					) : (
 						<S.PrimaryButton
 							onClick={handleSubmit}
-							disabled={submitting || loggedIn === null}
+							disabled={submitting || submitted || loggedIn === null}
 						>
 							{loggedIn === null
 								? '확인 중...'
 								: submitting
 									? '저장 중...'
-									: '저장하기'}
+									: submitted
+										? '저장됨'
+										: '저장하기'}
 						</S.PrimaryButton>
 					)}
 				</S.Actions>

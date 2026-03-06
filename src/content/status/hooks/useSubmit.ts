@@ -1,9 +1,10 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { sendMessageAsync } from '../../../shared/utils/chrome-messaging';
 import type { SubmitResponse } from '../../../shared/types/chrome-messages';
 
 export function useSubmit() {
 	const [submitting, setSubmitting] = useState(false);
+	const submittingRef = useRef(false);
 
 	const submit = useCallback(
 		async (
@@ -12,6 +13,8 @@ export function useSubmit() {
 			solveType: 'SELF' | 'SOLUTION',
 			memo?: string | null,
 		): Promise<boolean> => {
+			if (submittingRef.current) return false;
+			submittingRef.current = true;
 			setSubmitting(true);
 			try {
 				const response = await sendMessageAsync<SubmitResponse>({
@@ -22,6 +25,7 @@ export function useSubmit() {
 			} catch {
 				return false;
 			} finally {
+				submittingRef.current = false;
 				setSubmitting(false);
 			}
 		},
