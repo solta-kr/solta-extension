@@ -1,6 +1,8 @@
 export interface TimerEntry {
 	startedAtMs: number;
 	running: boolean;
+	paused: boolean;
+	accumulatedMs: number;
 	title?: string;
 }
 

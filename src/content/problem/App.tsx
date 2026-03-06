@@ -15,12 +15,20 @@ interface Props {
 }
 
 export default function App({ problemId, title }: Props) {
-	const { running, elapsedMs, toggle } = useTimer(problemId, title);
+	const { running, paused, elapsedMs, start, pause, resume, reset } = useTimer(problemId, title);
 
 	return (
 		<Container>
-			<TimerButton running={running} onClick={toggle} />
-			<TimerDisplay running={running} elapsedMs={elapsedMs} />
+			<TimerButton
+				running={running}
+				paused={paused}
+				elapsedMs={elapsedMs}
+				onStart={start}
+				onPause={pause}
+				onResume={resume}
+				onReset={reset}
+			/>
+			<TimerDisplay running={running} paused={paused} elapsedMs={elapsedMs} />
 		</Container>
 	);
 }

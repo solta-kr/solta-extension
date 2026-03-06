@@ -120,13 +120,26 @@ export function useStatusWatcher(
 							if (rowTs && rowTs >= startedAtSec) {
 								lastHandledRef.current = solutionId;
 								const elapsedMs =
-									Date.now() - state.startedAtMs;
+									state.accumulatedMs +
+									(Date.now() - state.startedAtMs);
 								sendMessage({
 									type: 'STOP_TIMER_IF_RUNNING',
 									payload: { problemId: pid },
 								});
 								onSolvedRef.current(pid, elapsedMs);
 							}
+						} else if (
+							state?.paused &&
+							state.accumulatedMs > 0 &&
+							isNewlyAc
+						) {
+							// 일시정지 중 AC: 새로 AC된 행만 처리, 누적 시간 사용
+							lastHandledRef.current = solutionId;
+							sendMessage({
+								type: 'STOP_TIMER_IF_RUNNING',
+								payload: { problemId: pid },
+							});
+							onSolvedRef.current(pid, state.accumulatedMs);
 						} else if (isNewlyAc) {
 							// 타이머 미사용: 채점 중 → AC로 새로 전환된 경우만 처리
 							lastHandledRef.current = solutionId;

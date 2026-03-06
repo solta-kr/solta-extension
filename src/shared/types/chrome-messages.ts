@@ -20,12 +20,17 @@ export type ChromeMessage =
 			};
 	  }
 	| { type: 'FETCH_PROBLEM_META'; payload: { problemId: string } }
+	| { type: 'PAUSE_TIMER'; payload: { problemId: string } }
+	| { type: 'RESUME_TIMER'; payload: { problemId: string } }
+	| { type: 'RESET_TIMER'; payload: { problemId: string } }
 	| { type: 'CHECK_AUTH' }
 	| { type: 'LOGIN' };
 
 export interface TimerStateResponse {
 	running: boolean;
+	paused: boolean;
 	startedAtMs?: number;
+	accumulatedMs: number;
 }
 
 export interface SubmitResponse {

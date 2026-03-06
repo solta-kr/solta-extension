@@ -1,5 +1,13 @@
 import type { ChromeMessage } from '../shared/types/chrome-messages';
-import { startTimer, stopTimer, getTimer, restoreTimerSync } from './timer-manager';
+import {
+	startTimer,
+	stopTimer,
+	pauseTimer,
+	resumeTimer,
+	resetTimer,
+	getTimer,
+	restoreTimerSync,
+} from './timer-manager';
 import { submitToServer } from './api';
 import { fetchProblemMeta } from '../shared/utils/solved-ac';
 import { fetchWithAuth } from '../shared/utils/fetch-with-auth';
@@ -26,17 +34,40 @@ export function handleMessage(
 			break;
 		}
 
+		case 'PAUSE_TIMER': {
+			const { problemId } = message.payload;
+			if (!problemId) return;
+			pauseTimer(problemId);
+			break;
+		}
+
+		case 'RESUME_TIMER': {
+			const { problemId } = message.payload;
+			if (!problemId) return;
+			resumeTimer(problemId);
+			break;
+		}
+
+		case 'RESET_TIMER': {
+			const { problemId } = message.payload;
+			if (!problemId) return;
+			resetTimer(problemId);
+			break;
+		}
+
 		case 'GET_TIMER_STATE': {
 			const { problemId } = message.payload;
 			if (!problemId) {
-				sendResponse({ running: false });
+				sendResponse({ running: false, paused: false, accumulatedMs: 0 });
 				break;
 			}
 			const existing = getTimer(problemId);
 			if (existing) {
 				sendResponse({
 					running: existing.running,
+					paused: existing.paused,
 					startedAtMs: existing.startedAtMs,
+					accumulatedMs: existing.accumulatedMs,
 				});
 				break;
 			}
@@ -44,10 +75,12 @@ export function handleMessage(
 				if (timer) {
 					sendResponse({
 						running: timer.running,
+						paused: timer.paused,
 						startedAtMs: timer.startedAtMs,
+						accumulatedMs: timer.accumulatedMs,
 					});
 				} else {
-					sendResponse({ running: false });
+					sendResponse({ running: false, paused: false, accumulatedMs: 0 });
 				}
 			});
 			return true; // async sendResponse
