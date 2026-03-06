@@ -23,7 +23,17 @@ const TIER_COLORS: Record<string, string> = {
 	R: 'hsl(350, 85%, 55%)',
 };
 
-export function getTierColor(levelShort: string): string {
+export function getTierColor(levelShort: string | null | undefined): string {
+	if (!levelShort) return 'hsl(0, 0%, 50%)';
 	const group = levelShort.charAt(0).toUpperCase();
 	return TIER_COLORS[group] ?? 'hsl(0, 0%, 50%)';
+}
+
+export function getLevelColor(level: number): string {
+	if (level <= 10) return 'hsl(30, 70%, 45%)';
+	if (level <= 20) return 'hsl(210, 15%, 60%)';
+	if (level <= 30) return 'hsl(45, 100%, 50%)';
+	if (level <= 40) return 'hsl(175, 60%, 55%)';
+	if (level <= 50) return 'hsl(200, 100%, 65%)';
+	return 'hsl(350, 85%, 55%)';
 }

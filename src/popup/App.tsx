@@ -1,12 +1,14 @@
 import styled from 'styled-components';
 import { useAuth } from './hooks/useAuth';
+import { usePopupData } from './hooks/usePopupData';
 import LoginView from './components/LoginView/LoginView';
-import UserInfo from './components/UserInfo/UserInfo';
-import UsageGuide from './components/UsageGuide/UsageGuide';
+import UserXpCard from './components/UserXpCard/UserXpCard';
+import PopupReviewSection from './components/PopupReviewSection/PopupReviewSection';
+import PopupFooter from './components/PopupFooter/PopupFooter';
 import StatusMessage from './components/StatusMessage/StatusMessage';
 
 const Wrapper = styled.div`
-	padding: 20px;
+	padding: 16px;
 	animation: fadeIn 0.25s ease-out;
 `;
 
@@ -15,8 +17,8 @@ const Header = styled.div`
 	align-items: center;
 	justify-content: center;
 	gap: 10px;
-	margin-bottom: 20px;
-	padding-bottom: 16px;
+	margin-bottom: 16px;
+	padding-bottom: 14px;
 	border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
@@ -43,8 +45,8 @@ const Title = styled.h1`
 `;
 
 export default function App() {
-	const { loading, loggedIn, user, loginLoading, status, login, logout } =
-		useAuth();
+	const { loading, loggedIn, user, loginLoading, status, login, logout } = useAuth();
+	const { xpSummary, reviews, isLoading: dataLoading } = usePopupData(user?.name);
 
 	if (loading) return null;
 
@@ -61,20 +63,24 @@ export default function App() {
 
 			{loggedIn && user ? (
 				<>
-					<UserInfo
-						name={user.name}
+					<UserXpCard
+						username={user.name}
 						avatarUrl={user.avatarUrl}
-						onLogout={logout}
+						xpSummary={xpSummary}
+						isLoading={dataLoading}
 					/>
-					<UsageGuide />
+					<PopupReviewSection
+						username={user.name}
+						reviews={reviews}
+						isLoading={dataLoading}
+					/>
+					<PopupFooter username={user.name} onLogout={logout} />
 				</>
 			) : (
 				<LoginView loading={loginLoading} onLogin={login} />
 			)}
 
-			{status && (
-				<StatusMessage message={status.message} type={status.type} />
-			)}
+			{status && <StatusMessage message={status.message} type={status.type} />}
 		</Wrapper>
 	);
 }
