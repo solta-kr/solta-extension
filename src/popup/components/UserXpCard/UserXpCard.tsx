@@ -1,4 +1,4 @@
-import { getLevelColor } from '../../../shared/utils/tier';
+import { getLevelStyle } from '../../../shared/utils/tier';
 import type { XpSummaryResponse } from '../../../shared/types/api';
 import * as S from './UserXpCard.styled';
 
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function UserXpCard({ username, avatarUrl, xpSummary, isLoading }: Props) {
-	const levelColor = xpSummary ? getLevelColor(xpSummary.level) : undefined;
+	const style = xpSummary ? getLevelStyle(xpSummary.level) : undefined;
 	const remaining = xpSummary
 		? xpSummary.nextLevelRequiredXp - xpSummary.currentLevelXp
 		: 0;
@@ -26,14 +26,20 @@ export default function UserXpCard({ username, avatarUrl, xpSummary, isLoading }
 						<S.Username>{username}</S.Username>
 						{isLoading ? (
 							<S.SkeletonBadge />
-						) : xpSummary && levelColor ? (
-							<S.LevelBadge $color={levelColor}>Lv.{xpSummary.level}</S.LevelBadge>
+						) : xpSummary && style ? (
+							<S.LevelBadge
+								$background={style.background}
+								$textColor={style.textColor}
+								$glow={style.glow}
+							>
+								Lv.{xpSummary.level}
+							</S.LevelBadge>
 						) : null}
 					</S.NameRow>
 					{isLoading ? (
 						<S.SkeletonLine $width="55%" />
 					) : (
-						<S.LevelTitle>{xpSummary?.title ?? ''}</S.LevelTitle>
+						<S.LevelTitle $color={style?.color}>{xpSummary?.title ?? ''}</S.LevelTitle>
 					)}
 				</S.UserMeta>
 			</S.TopRow>
@@ -45,12 +51,12 @@ export default function UserXpCard({ username, avatarUrl, xpSummary, isLoading }
 					<S.SkeletonBar />
 					<S.SkeletonLine $width="75%" />
 				</S.XpSkeleton>
-			) : xpSummary && levelColor ? (
+			) : xpSummary && style ? (
 				<S.XpSection>
 					<S.ProgressTrack>
 						<S.ProgressFill
 							$percent={xpSummary.progressPercent}
-							$color={levelColor}
+							$bar={style.progressBar}
 						/>
 					</S.ProgressTrack>
 					<S.XpRow>

@@ -29,11 +29,62 @@ export function getTierColor(levelShort: string | null | undefined): string {
 	return TIER_COLORS[group] ?? 'hsl(0, 0%, 50%)';
 }
 
-export function getLevelColor(level: number): string {
-	if (level <= 10) return 'hsl(30, 70%, 45%)';
-	if (level <= 20) return 'hsl(210, 15%, 60%)';
-	if (level <= 30) return 'hsl(45, 100%, 50%)';
-	if (level <= 40) return 'hsl(175, 60%, 55%)';
-	if (level <= 50) return 'hsl(200, 100%, 65%)';
-	return 'hsl(350, 85%, 55%)';
+export interface LevelStyle {
+	color: string;
+	background: string;
+	progressBar: string;
+	textColor: string;
+	glow?: string;
+}
+
+export function getLevelStyle(level: number): LevelStyle {
+	if (level >= 100) {
+		return {
+			color: '#F59E0B',
+			background: 'linear-gradient(135deg, #F59E0B, #FBBF24, #FDE68A)',
+			progressBar: 'linear-gradient(90deg, #F59E0B, #FBBF24)',
+			textColor: '#1a1200',
+			glow: '0 0 12px rgba(245,158,11,0.6)',
+		};
+	}
+	if (level >= 91) {
+		return {
+			color: '#F97316',
+			background: 'linear-gradient(135deg, #F97316, #EF4444)',
+			progressBar: 'linear-gradient(90deg, #F97316, #EF4444)',
+			textColor: '#fff',
+			glow: '0 0 10px rgba(249,115,22,0.5)',
+		};
+	}
+	if (level >= 61) {
+		return {
+			color: '#A78BFA',
+			background: 'rgba(167,139,250,0.15)',
+			progressBar: 'linear-gradient(90deg, #8B5CF6, #A78BFA)',
+			textColor: '#A78BFA',
+			glow: '0 0 8px rgba(167,139,250,0.4)',
+		};
+	}
+	if (level >= 31) {
+		return {
+			color: '#38BDF8',
+			background: 'rgba(56,189,248,0.12)',
+			progressBar: 'linear-gradient(90deg, #0EA5E9, #38BDF8)',
+			textColor: '#38BDF8',
+		};
+	}
+	if (level >= 11) {
+		return {
+			color: '#34D399',
+			background: 'rgba(52,211,153,0.12)',
+			progressBar: 'linear-gradient(90deg, #10B981, #34D399)',
+			textColor: '#34D399',
+		};
+	}
+	return {
+		color: '#94A3B8',
+		background: 'rgba(148,163,184,0.12)',
+		progressBar: '#94A3B8',
+		textColor: '#94A3B8',
+	};
 }

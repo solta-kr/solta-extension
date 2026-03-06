@@ -56,20 +56,25 @@ export const Username = styled.div`
 	white-space: nowrap;
 `;
 
-export const LevelBadge = styled.span<{ $color: string }>`
+export const LevelBadge = styled.span<{
+	$background: string;
+	$textColor: string;
+	$glow?: string;
+}>`
 	flex-shrink: 0;
 	font-size: 11px;
 	font-weight: 700;
-	color: ${({ $color }) => $color};
-	background: ${({ $color }) => `${$color}22`};
-	border: 1px solid ${({ $color }) => `${$color}44`};
-	border-radius: 4px;
-	padding: 1px 5px;
+	color: ${({ $textColor }) => $textColor};
+	background: ${({ $background }) => $background};
+	border-radius: 999px;
+	padding: 2px 8px;
+	${({ $glow }) => $glow && `box-shadow: ${$glow};`}
 `;
 
-export const LevelTitle = styled.div`
+export const LevelTitle = styled.div<{ $color?: string }>`
 	font-size: 12px;
-	color: ${({ theme }) => theme.colors.textMuted};
+	color: ${({ $color }) => $color ?? 'inherit'};
+	font-weight: 500;
 `;
 
 export const Divider = styled.div`
@@ -83,16 +88,16 @@ export const XpSection = styled.div``;
 export const ProgressTrack = styled.div`
 	height: 6px;
 	background: ${({ theme }) => theme.colors.bgTertiary};
-	border-radius: 3px;
+	border-radius: 999px;
 	overflow: hidden;
 	margin-bottom: 7px;
 `;
 
-export const ProgressFill = styled.div<{ $percent: number; $color: string }>`
+export const ProgressFill = styled.div<{ $percent: number; $bar: string }>`
 	height: 100%;
 	width: ${({ $percent }) => Math.min(100, $percent)}%;
-	background: ${({ $color }) => $color};
-	border-radius: 3px;
+	background: ${({ $bar }) => $bar};
+	border-radius: 999px;
 	transition: width 0.4s ease;
 `;
 
@@ -123,7 +128,7 @@ const SkeletonBase = styled.div`
 export const SkeletonBadge = styled(SkeletonBase)`
 	width: 36px;
 	height: 18px;
-	border-radius: 4px;
+	border-radius: 999px;
 `;
 
 export const SkeletonLine = styled(SkeletonBase)<{ $width: string }>`
@@ -140,5 +145,5 @@ export const XpSkeleton = styled.div`
 export const SkeletonBar = styled(SkeletonBase)`
 	height: 6px;
 	width: 100%;
-	border-radius: 3px;
+	border-radius: 999px;
 `;
