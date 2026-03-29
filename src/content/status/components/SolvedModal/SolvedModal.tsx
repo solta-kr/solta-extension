@@ -107,12 +107,15 @@ export default function SolvedModal({
 
 	const handleSubmit = async () => {
 		const solveTimeSeconds = solveType === 'SOLUTION' && !includeTime ? null : getTotalSeconds();
-		const success = await submit(problemId, solveTimeSeconds, solveType, memo);
-		if (success) {
+		const result = await submit(problemId, solveTimeSeconds, solveType, memo);
+		if (result.success) {
 			setSubmitted(true);
 			showToast('저장되었습니다!', 'success');
 		} else {
-			showToast('저장에 실패했습니다. 다시 시도해주세요.', 'error');
+			const msg = result.error
+				? `저장 실패: ${result.error}`
+				: '저장에 실패했습니다. 다시 시도해주세요.';
+			showToast(msg, 'error');
 		}
 	};
 

@@ -12,8 +12,8 @@ export function useSubmit() {
 			solveTimeSeconds: number | null,
 			solveType: 'SELF' | 'SOLUTION',
 			memo?: string | null,
-		): Promise<boolean> => {
-			if (submittingRef.current) return false;
+		): Promise<{ success: boolean; error?: string }> => {
+			if (submittingRef.current) return { success: false };
 			submittingRef.current = true;
 			setSubmitting(true);
 			try {
@@ -21,9 +21,10 @@ export function useSubmit() {
 					type: 'SUBMIT_TO_SERVER',
 					payload: { problemId, solveTimeSeconds, solveType, memo },
 				});
-				return response.success;
-			} catch {
-				return false;
+				return { success: response.success, error: response.error };
+			} catch (e) {
+				const msg = e instanceof Error ? e.message : undefined;
+				return { success: false, error: msg };
 			} finally {
 				submittingRef.current = false;
 				setSubmitting(false);

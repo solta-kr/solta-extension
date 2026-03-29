@@ -12,6 +12,11 @@ function getUserIdFromQuery(): string | null {
 	return url.searchParams.get('user_id');
 }
 
+function isFromMine(): boolean {
+	const url = new URL(location.href);
+	return url.searchParams.get('from_mine') === '1';
+}
+
 function isRowAccepted(tr: HTMLTableRowElement): boolean {
 	const resultSpan = tr.querySelector('.result-text');
 	if (!resultSpan) return false;
@@ -59,6 +64,8 @@ export function useStatusWatcher(
 	onSolvedRef.current = onSolved;
 
 	useEffect(() => {
+		if (!isFromMine()) return;
+
 		const tbody = document.querySelector(
 			'table#status-table tbody, .result tbody, #status-table tbody, tbody',
 		);
